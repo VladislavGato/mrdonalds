@@ -5,7 +5,7 @@ import { totalPriceItems, formatCurrency } from '../functions/secondaryFunction'
 
 const OrderItemStyled = styled.li`
 	display: flex;
-	margin: 15px 0;
+	margin: 15px 0 0 0;
 `;
 
 const ItemName = styled.span `
@@ -31,14 +31,22 @@ const TrashButton = styled.button`
   cursor: pointer;
 `;
 
+const ToppingsList = styled.span`
+  font-size: 14px;
+`;
+
 export const OrderListItem = ({ order }) => {
+  const toppingsList = order.topping && order.topping.filter(item => item.checked).map(item => item.name).join(', ');
 
 	return (
-		<OrderItemStyled>
-			<ItemName>{order.name}</ItemName>
-      <span>{order.count}</span>
-      <ItemPrice>{formatCurrency(totalPriceItems(order))}</ItemPrice>
-			<TrashButton/>
-		</OrderItemStyled>
+    <>
+      <OrderItemStyled>
+        <ItemName>{order.name}</ItemName>
+        <span>{order.count}</span>
+        <ItemPrice>{formatCurrency(totalPriceItems(order))}</ItemPrice>
+        <TrashButton/>
+      </OrderItemStyled>
+      {toppingsList && <ToppingsList>{toppingsList}</ToppingsList>} 
+    </>
 	)
 };
