@@ -83,7 +83,7 @@ export const ModalItem = ({ openItem, setOpenItem, orders, setOrders }) => {
 				<Content>
 					<HeaderContent>
 						<div>{openItem.name}</div>
-						<div>{openItem.price}</div>
+						<div>{formatCurrency(openItem.price)}</div>
 					</HeaderContent>
           <CountItem {...counter} />
           <TotalPriceItem>
