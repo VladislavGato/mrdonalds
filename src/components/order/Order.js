@@ -11,7 +11,7 @@ const OrderStyled = styled.section`
   top: 80px;
   left: 0;
   background-color: #fff;
-  min-width: 380px;
+  width: 380px;
 	height: calc(100% - 80px);
 	box-shadow: 3px 4px 5px rgba(0, 0, 0, 0.25);
 	padding: 20px;
@@ -50,7 +50,14 @@ const EmptylIst = styled.p`
 	text-align: center;
 `;
 
-export const Order = ({ orders }) => {
+export const Order = ({ orders, setOrders }) => {
+
+	const deleteItem = index => {
+		// const newOrders = [...orders];
+		// newOrders.splice(index, 1);
+		const newOrders = orders.filter((item, i) => index !==i);
+		setOrders(newOrders);
+	}
 
 	const total = orders.reduce((result, order) =>
 		totalPriceItems(order) + result, 0);
@@ -64,7 +71,12 @@ export const Order = ({ orders }) => {
 			<OrderContent>
 				{orders.length ?
 					<OrderList>
-						{orders.map((order, index) => <OrderListItem order={order} key={index} />)}
+						{orders.map((order, index) => <OrderListItem
+							order={order}
+							key={index}
+							deleteItem={deleteItem}
+							index={index}
+						/>)}
 					</OrderList> :
 					<EmptylIst>Список заказов пуст</EmptylIst>
 				}
