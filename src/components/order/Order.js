@@ -55,7 +55,7 @@ export const Order = ({ orders, setOrders }) => {
 	const deleteItem = index => {
 		// const newOrders = [...orders];
 		// newOrders.splice(index, 1);
-		const newOrders = orders.filter((item, i) => index !==i);
+		const newOrders = orders.filter((item, i) => index !== i);
 		setOrders(newOrders);
 	}
 
