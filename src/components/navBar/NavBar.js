@@ -18,21 +18,21 @@ const NavBarStyled = styled.header`
   color: white;
 `;
 
-const Logo = styled.div `
+const Logo = styled.div`
 	display: flex;
 	align-items: center;
 `;
 
-const H1 = styled.h1 `
+const H1 = styled.h1`
   font-size: 24px;
   margin-left: 15px;
 `;
 
-const ImgLogo = styled.img `
+const ImgLogo = styled.img`
   width: 50px;
 `;
 
-const Login = styled.button `
+const Login = styled.button`
 	background-color: transparent;
 	border-color: transparent;
 	color: #fff;
@@ -40,15 +40,43 @@ const Login = styled.button `
 	line-height: 19px;
 `;
 
-export const NavBar = () => (
+const User = styled.div`
+	display: flex;
+	align-items: center;
+	text-align: center;
+`;
+
+const LogOut = styled.span`
+	font-size: 20px;
+	font-weight: 700px;
+	cursor: pointer;
+	margin-right: 30px;
+`;
+
+const Figure = styled.figure`
+	margin: 0 30px;
+`;
+
+export const NavBar = ({ authentication, logIn, logOut }) => (
 	<NavBarStyled>
 		<Logo>
 			<ImgLogo src={logoImg} alt='лого' />
 			<H1>MrDonald's</H1>
 		</Logo>
-		<Login>
-			<img src={signInImg} alt="войти" />
-			<p>войти</p>
-		</Login>
+		{authentication ?
+			<User>
+				<Figure>
+					<img src={signInImg} alt={authentication.displayName} />
+					<figcaption>{authentication.displayName}</figcaption>
+				</Figure>
+				<LogOut title='Выйти' onClick={logOut} >X</LogOut>
+			</User> :
+			<Login onClick={logIn}>
+				<Figure>
+					<img src={signInImg} alt="войти" />
+					<figcaption>войти</figcaption>
+				</Figure>
+			</Login>
+		}
 	</NavBarStyled>
 );
