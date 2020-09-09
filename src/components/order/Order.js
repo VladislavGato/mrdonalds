@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonCheckout } from '../style/ButtonCheckout';
 import { OrderListItem } from './OrderListItem';
-import { totalPriceItems, formatCurrency } from '../functions/secondaryFunction';
+import { totalPriceItems, formatCurrency, projection } from '../functions/secondaryFunction';
 
 const OrderStyled = styled.section`
 	position: fixed;
@@ -50,7 +50,31 @@ const EmptylIst = styled.p`
 	text-align: center;
 `;
 
-export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn }) => {
+const rulesData = {
+	itemName: ['name'],
+	price: ['price'],
+	count: ['count'],
+	topping: ['topping', arr => arr.filter(obj => obj.checked).map(obj => obj.name),
+		arr => arr.length ? arr : 'no topping'],
+	choice: ['choice', item => item ? item : 'no choices'],
+};
+
+export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn, firebaseDatabase }) => {
+	const dataBase = firebaseDatabase();
+
+	const sendOrder = () => {
+		// console.log('sendOrder -> orders: ', orders);
+		const newOrder = orders.map(projection(rulesData));
+		// console.log('sendOrder -> newOrder: ', newOrder);
+
+		dataBase.ref('orders').push().set({
+			nameClient: authentication.displayName,
+			email: authentication.email,
+			order: newOrder
+		});
+
+		setOrders([]);
+	}
 
 	const deleteItem = index => {
 		// const newOrders = [...orders];
@@ -66,10 +90,12 @@ export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn })
 		order.count + result, 0);
 
 	const confirmTheOrder = () => {
-		if (!authentication) {
-			logIn().then(() => console.log('1orders: ', orders));
+		if (authentication) {
+			console.log('Уже были авторизованы. Заказ отправили: ', orders);
+			sendOrder();
 		} else {
-			console.log('2orders: ', orders);
+			// logIn();
+			logIn().then(() => console.log('Не были авторизованы. Авторизовались. Заказ не отправили: ', orders));
 		}
 	}
 
