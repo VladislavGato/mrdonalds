@@ -11,6 +11,7 @@ import { useOpenItem } from './components/hooks/useOpenItem';
 import { useOrders } from './components/hooks/useOrders';
 import { useAuth } from './components/hooks/useAuth';
 import { useTitle } from './components/hooks/useTitle';
+import { useDB } from './components/hooks/useDB';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBh29VhUYRGPZ0laMwNg6AbA-y84Z7nR4o",
@@ -28,7 +29,15 @@ function App() {
   const auth = useAuth(firebase.auth);
   const openItem = useOpenItem();
   const orders = useOrders();
+
+  // способ с получением данных напрямую с базы
+  const database = firebase.database();
+
   useTitle(openItem.openItem);
+
+  // 2
+  const dbMenu = useDB(database)
+  // console.log('dbMenu: ', dbMenu);
 
   return (
     <>
@@ -38,9 +47,12 @@ function App() {
         {...orders}
         {...openItem}
         {...auth}
-        firebaseDatabase={firebase.database}
+        //firebaseDatabase={firebase.database}
+        database={database}
       />
-      <Menu {...openItem} />
+
+      {/* <Menu {...openItem} /> */}
+      <Menu {...openItem} dbMenu={dbMenu} />
       {openItem.openItem &&
         <ModalItem {...openItem} {...orders}  />
       }
