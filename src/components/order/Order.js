@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ButtonCheckout } from '../style/ButtonCheckout';
 import { OrderListItem } from './OrderListItem';
-import { totalPriceItems, formatCurrency, projection } from '../functions/secondaryFunction';
+// import { totalPriceItems, formatCurrency, projection } from '../functions/secondaryFunction';
+import { totalPriceItems, formatCurrency } from '../functions/secondaryFunction';
+import { Context } from '../functions/context';
 
 const OrderStyled = styled.section`
 	position: fixed;
@@ -17,7 +19,7 @@ const OrderStyled = styled.section`
 	padding: 20px;
 `;
 
-const OrderTitle = styled.h2`
+export const OrderTitle = styled.h2`
 	text-align: center;
 	margin-bottom: 30px;
 `;
@@ -30,7 +32,7 @@ const OrderList = styled.ul`
 
 `;
 
-const Total = styled.ul`
+export const Total = styled.ul`
 	display: flex;
 	margin: 30px;
 
@@ -40,7 +42,7 @@ const Total = styled.ul`
 	}
 `;
 
-const TotalPrice = styled.ul`
+export const TotalPrice = styled.ul`
   text-align: right;
   min-width: 65px;
   margin-left: 20px;
@@ -50,38 +52,43 @@ const EmptylIst = styled.p`
 	text-align: center;
 `;
 
-const rulesData = {
-	itemName: ['name'],
-	price: ['price'],
-	count: ['count'],
-	topping: ['topping', arr => arr.filter(obj => obj.checked).map(obj => obj.name),
-		arr => arr.length ? arr : 'no topping'],
-	choice: ['choice', item => item ? item : 'no choices'],
-};
+// const rulesData = {
+// 	itemName: ['name'],
+// 	price: ['price'],
+// 	count: ['count'],
+// 	topping: ['topping', arr => arr.filter(obj => obj.checked).map(obj => obj.name),
+// 		arr => arr.length ? arr : 'no topping'],
+// 	choice: ['choice', item => item ? item : 'no choices'],
+// };
 
 // 1
 // export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn, firebaseDatabase }) => {
 // 2
-export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn, database }) => {
+export const Order = () => {
+	const {
+		auth: { authentication, logIn },
+		orders: { orders, setOrders },
+		orderConfirm: { setOpenOrderConfirm }
+	} = useContext(Context);
 	//1
 	// const dataBase = firebaseDatabase();
 
-	const sendOrder = () => {
-		// console.log('sendOrder -> orders: ', orders);
-		const newOrder = orders.map(projection(rulesData));
-		// console.log('sendOrder -> newOrder: ', newOrder);
+	// const sendOrder = () => {
+	// 	// console.log('sendOrder -> orders: ', orders);
+	// 	const newOrder = orders.map(projection(rulesData));
+	// 	// console.log('sendOrder -> newOrder: ', newOrder);
 
-		// 1
-		// dataBase.ref('orders').push().set({
-		// 2
-		database.ref('orders').push().set({
-			nameClient: authentication.displayName,
-			email: authentication.email,
-			order: newOrder
-		});
+	// 	// 1
+	// 	// dataBase.ref('orders').push().set({
+	// 	// 2
+	// 	database.ref('orders').push().set({
+	// 		nameClient: authentication.displayName,
+	// 		email: authentication.email,
+	// 		order: newOrder
+	// 	});
 
-		setOrders([]);
-	}
+	// 	setOrders([]);
+	// }
 
 	const deleteItem = index => {
 		// const newOrders = [...orders];
@@ -98,8 +105,10 @@ export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn, d
 
 	const confirmTheOrder = () => {
 		if (authentication) {
-			console.log('Уже были авторизованы. Заказ отправили: ', orders);
-			sendOrder();
+			// console.log('Уже были авторизованы. Заказ отправили: ', orders);
+			// sendOrder();
+
+			setOpenOrderConfirm(true);
 		} else {
 			// logIn();
 			logIn().then(() => console.log('Не были авторизованы. Авторизовались. Заказ не отправили: ', orders));
@@ -117,18 +126,21 @@ export const Order = ({ orders, setOrders, setOpenItem, authentication, logIn, d
 							key={index}
 							deleteItem={deleteItem}
 							index={index}
-							setOpenItem={setOpenItem}
 						/>)}
 					</OrderList> :
 					<EmptylIst>Список заказов пуст</EmptylIst>
 				}
 			</OrderContent>
-			<Total>
-				<span>Итого</span>
-				<span>{totalCounter}</span>
-				<TotalPrice>{formatCurrency(total)}</TotalPrice>
-			</Total>
-			<ButtonCheckout onClick={confirmTheOrder} >Оформить</ButtonCheckout>
+			{orders.length ?
+				<>
+					<Total>
+						<span>Итого</span>
+						<span>{totalCounter}</span>
+						<TotalPrice>{formatCurrency(total)}</TotalPrice>
+					</Total>
+					<ButtonCheckout onClick={confirmTheOrder} >Оформить</ButtonCheckout>
+				</> : null
+			}
 		</OrderStyled>
 	)
 };

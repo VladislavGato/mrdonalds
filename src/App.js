@@ -12,6 +12,9 @@ import { useOrders } from './components/hooks/useOrders';
 import { useAuth } from './components/hooks/useAuth';
 import { useTitle } from './components/hooks/useTitle';
 import { useDB } from './components/hooks/useDB';
+import { OrderConfirm } from './components/order/OrderConfirm';
+import { useOrderConfirm } from './components/hooks/useOrderConfirm';
+import { Context } from './components/functions/context';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBh29VhUYRGPZ0laMwNg6AbA-y84Z7nR4o",
@@ -30,6 +33,9 @@ function App() {
   const openItem = useOpenItem();
   const orders = useOrders();
 
+  const orderConfirm = useOrderConfirm();
+
+
   // способ с получением данных напрямую с базы
   const database = firebase.database();
 
@@ -40,23 +46,29 @@ function App() {
   // console.log('dbMenu: ', dbMenu);
 
   return (
-    <>
+    <Context.Provider value={{
+      auth,
+      openItem,
+      orders,
+      orderConfirm,
+      database,
+      dbMenu
+    }}>
       <GlobalStyle />
-      <NavBar {...auth} />
-      <Order
-        {...orders}
-        {...openItem}
-        {...auth}
-        //firebaseDatabase={firebase.database}
-        database={database}
-      />
+      <NavBar />
+      <Order />
 
-      {/* <Menu {...openItem} /> */}
-      <Menu {...openItem} dbMenu={dbMenu} />
+      {/* <Menu {...openItem} dbMenu={dbMenu} /> */}
+      <Menu
+        // dbMenu={dbMenu}
+      />
       {openItem.openItem &&
-        <ModalItem {...openItem} {...orders}  />
+        <ModalItem />
       }
-    </>
+      {orderConfirm.openOrderConfirm &&
+        <OrderConfirm />
+      }
+    </Context.Provider>
   );
 }
 

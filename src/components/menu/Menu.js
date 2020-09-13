@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 // import dbMenu from '../DBMenu';
 import { ListItem } from './ListItem';
 import { Banner } from './Banner';
 
-// 1
-// import { useFetch } from '../hooks/useFetch';
-
 import { Preloader } from './Preloader';
+import { Context } from '../functions/context';
 
 const MenuStyled = styled.main`
 	background-color: #ccc;
@@ -19,14 +17,10 @@ const SectionMenu = styled.section `
 	padding: 30px;
 `;
 
-// 1
-// export const Menu = ({ setOpenItem }) => {
-	// const res = useFetch();
-	// const dbMenu = res.response;
+export const Menu = () => {
+	const { dbMenu } = useContext(Context);
+	console.log('dbMenu: ', dbMenu);
 
-// 2
-export const Menu = ({ setOpenItem, dbMenu }) => {
-	
 	return (
 		<MenuStyled>
 			<Banner />
@@ -37,7 +31,6 @@ export const Menu = ({ setOpenItem, dbMenu }) => {
 						<h2>Бургеры</h2>
 						<ListItem 
 							itemList={dbMenu.burger}
-							setOpenItem={setOpenItem}
 						/>
 					</SectionMenu>
 
@@ -45,7 +38,6 @@ export const Menu = ({ setOpenItem, dbMenu }) => {
 						<h2>Закуски / Напитки</h2>
 						<ListItem
 							itemList={dbMenu.other}
-							setOpenItem={setOpenItem}
 						/>
 					</SectionMenu>
 				{/* </> : res.error ?
