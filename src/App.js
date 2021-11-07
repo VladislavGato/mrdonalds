@@ -1,11 +1,18 @@
-import './App.css';
+import React from 'react';
 
 function App() {
   return (
     <div className="App">
-      Hello React
+
+      <header className="App-header">
+        Hello React
+      </header>
+
+      <h1>Hello React</h1>
+
+
       <br/>
-      <a href="#">qweqweq</a>
+      <a target="_blank" rel="noreferrer" href="https://www.google.ru/">qweqweq</a>
       <br/>
 
       <ul>
