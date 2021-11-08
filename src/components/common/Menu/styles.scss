@@ -1,0 +1,14 @@
+// @import '../../../styles/settings/colors';
+// @import '../../../styles/settings/breakpoints';
+// @import '../../../styles/settings/mixins';
+
+.menu {
+  background-color: #ccc;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+
+  &-section {
+    padding: 30px;
+  }
+}
