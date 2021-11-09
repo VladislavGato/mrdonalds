@@ -5,17 +5,23 @@ import Banner from "../Banner/Banner";
 
 import './styles.scss';
 
-const Menu = () => (
+const Menu = ({ setOpenItem }) => (
   <main className="menu">
     <Banner />
     <section className="menu-section">
       <h2>Бургеры</h2>
-      <ListItem itemList={dbMenu.burger} />
+      <ListItem
+        itemList={dbMenu.burger}
+        setOpenItem={setOpenItem}
+      />
     </section>
 
     <section className="menu-section">
       <h2>Закуски / Напитки</h2>
-      <ListItem itemList={dbMenu.other} />
+      <ListItem
+        itemList={dbMenu.other}
+        setOpenItem={setOpenItem}
+      />
     </section>
   </main>
 )
